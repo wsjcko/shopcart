@@ -35,13 +35,12 @@ http://127.0.0.1:8500/ui/dc1/kv/create
 key: micro/config/mysql
 
 {
-  "host":"127.0.0.1",
+  "host":"172.31.24.144",
   "user":"root",
   "pwd":"123456",
   "database":"shopdb",
-  "port":3306
+  "port":"3306"
 }
-
 
 ### 链路追踪jaeger 耶格 
 [官方文档](https://www.jaegertracing.io/docs/1.32/)

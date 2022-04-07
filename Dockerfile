@@ -5,10 +5,11 @@ WORKDIR /data/www/shop
 RUN apk --update --no-cache add ca-certificates gcc libtool make musl-dev protoc
 COPY Makefile go.mod go.sum ./
 RUN make init
+#将代码复制到容器中
 COPY . .
 RUN make proto tidy build
 
 FROM scratch
 COPY --from=builder /data/www/shop/shopcart /shopcart
-ENTRYPOINT ["/shopcart"]
-CMD []
+ENTRYPOINT ["/shopcart", "-IP","127.0.0.1"]
+CMD ["-h"]
