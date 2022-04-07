@@ -18,22 +18,25 @@ import (
 )
 
 var (
-	MICRO_SERVICE_NAME = "go.micro.service.shop.cart"
-	MICRO_VERSION      = "latest"
-	MICRO_ADDRESS      = "127.0.0.1:8087"
-	MICRO_QPS          = 100
+	MICRO_SERVICE_NAME   = "go.micro.service.shop.cart"
+	MICRO_VERSION        = "latest"
+	MICRO_ADDRESS        = "127.0.0.1:8087"
+	MICRO_QPS            = 100
+	MICRO_CONSUL_HOST    = "127.0.0.1"
+	MICRO_CONSUL_PORT    = "8500"
+	MICRO_CONSUL_ADDRESS = "127.0.0.1:8500"
 )
 
 func main() {
 	//配置中心
-	consulConfig, err := common.GetConsulConfig("127.0.0.1", 8500, "/micro/config")
+	consulConfig, err := common.GetConsulConfig(MICRO_CONSUL_HOST, MICRO_CONSUL_PORT, "/micro/config")
 	if err != nil {
 		log.Fatal(err)
 	}
 	//注册中心
 	consulRegistry := consul.NewRegistry(func(options *registry.Options) {
 		options.Addrs = []string{
-			"127.0.0.1:8500",
+			MICRO_CONSUL_ADDRESS,
 		}
 	})
 
@@ -66,14 +69,14 @@ func main() {
 		//绑定链路追踪 服务端绑定handle 客户端绑定client
 		micro.WrapHandler(opentracing4.NewHandlerWrapper(opentracing.GlobalTracer())),
 		//添加限流
-		micro.WrapHandler(ratelimit.NewHandlerWrapper(MICRO_QPS)),
+		micro.WrapHandler(ratelimit4.NewHandlerWrapper(MICRO_QPS)),
 	)
 
 	//初始化建表
-	// err = repository.NewCartRepository(db).InitTable()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	err = repository.NewCartRepository(db).InitTable()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	cartService := service.NewCartService(repository.NewCartRepository(db))
 
@@ -81,7 +84,7 @@ func main() {
 	srv.Init()
 
 	// Register Handler
-	pb.RegisterCartHandler(srv.Server(), &handler.ShopCart{CartService: cartService})
+	pb.RegisterShopCartHandler(srv.Server(), &handler.ShopCart{CartService: cartService})
 
 	// Run service
 	if err := srv.Run(); err != nil {
