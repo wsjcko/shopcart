@@ -63,9 +63,6 @@ func main() {
 
 	fmt.Println("DOCKER_HOST ", DOCKER_HOST)
 
-	var ()
-	fmt.Println("MICRO_CONSUL_ADDRESS ", MICRO_CONSUL_ADDRESS)
-	fmt.Println("MICRO_JAEGER_ADDRESS ", MICRO_JAEGER_ADDRESS)
 	//配置中心
 	consulConfig, err := common.GetConsulConfig(MICRO_CONSUL_HOST, MICRO_CONSUL_PORT, "/micro/config")
 	if err != nil {
