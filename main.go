@@ -21,15 +21,22 @@ import (
 )
 
 var (
-	MICRO_SERVICE_NAME = "go.micro.service.shop.cart"
-	MICRO_VERSION      = "latest"
-	MICRO_ADDRESS      = "127.0.0.1:8087"
-	MICRO_QPS          = 100
-	DOCKER_HOST        = "127.0.0.1"
+	MICRO_SERVICE_NAME   = "go.micro.service.shop.cart"
+	MICRO_VERSION        = "latest"
+	MICRO_ADDRESS        = "127.0.0.1:8087"
+	MICRO_QPS            = 100
+	DOCKER_HOST          = "127.0.0.1"
+	MICRO_CONSUL_HOST    = "127.0.0.1"
+	MICRO_CONSUL_PORT    = "8500"
+	MICRO_CONSUL_ADDRESS = "127.0.0.1:8500"
+	MICRO_JAEGER_ADDRESS = "127.0.0.1:6831"
 )
 
 func SetDockerHost(host string) {
 	DOCKER_HOST = host
+	MICRO_CONSUL_HOST = host
+	MICRO_CONSUL_ADDRESS = host + ":8500"
+	MICRO_JAEGER_ADDRESS = host + ":6831"
 }
 
 func main() {
@@ -56,12 +63,7 @@ func main() {
 
 	fmt.Println("DOCKER_HOST ", DOCKER_HOST)
 
-	var (
-		MICRO_CONSUL_HOST    = DOCKER_HOST
-		MICRO_CONSUL_PORT    = "8500"
-		MICRO_CONSUL_ADDRESS = DOCKER_HOST + ":8500"
-		MICRO_JAEGER_ADDRESS = DOCKER_HOST + ":6831"
-	)
+	var ()
 	fmt.Println("MICRO_CONSUL_ADDRESS ", MICRO_CONSUL_ADDRESS)
 	fmt.Println("MICRO_JAEGER_ADDRESS ", MICRO_JAEGER_ADDRESS)
 	//配置中心

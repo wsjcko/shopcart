@@ -11,5 +11,6 @@ RUN make proto tidy build
 
 FROM scratch
 COPY --from=builder /data/www/shop/shopcart /shopcart
-ENTRYPOINT ["/shopcart", "-IP","127.0.0.1"]
+EXPOSE 8087
+ENTRYPOINT ["/shopcart", "-ip","127.0.0.1"]
 CMD ["-h"]
