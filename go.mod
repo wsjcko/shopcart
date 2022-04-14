@@ -13,7 +13,9 @@ require (
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	github.com/urfave/cli/v2 v2.3.0
 	go-micro.dev/v4 v4.6.0
+	go.uber.org/zap v1.10.0
 	google.golang.org/protobuf v1.26.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
 // This can be removed once etcd becomes go gettable, version 3.4 and 3.5 is not,

@@ -23,7 +23,7 @@ import (
 var (
 	MICRO_SERVICE_NAME   = "go.micro.service.shop.cart"
 	MICRO_VERSION        = "latest"
-	MICRO_ADDRESS        = "127.0.0.1:8087"
+	MICRO_ADDRESS        = "0.0.0.0:8087"
 	MICRO_QPS            = 100
 	DOCKER_HOST          = "127.0.0.1"
 	MICRO_CONSUL_HOST    = "127.0.0.1"
