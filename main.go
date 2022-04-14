@@ -63,10 +63,13 @@ func main() {
 
 	fmt.Println("DOCKER_HOST ", DOCKER_HOST)
 
+	//zapLogger
+	zapLogger := common.NewZapLogger("ShopCart", "micro.log")
+
 	//配置中心
 	consulConfig, err := common.GetConsulConfig(MICRO_CONSUL_HOST, MICRO_CONSUL_PORT, "/micro/config")
 	if err != nil {
-		log.Fatal(err)
+		zapLogger.Fatal("GetConsulConfig: ", err)
 	}
 	//注册中心
 	consulRegistry := consul.NewRegistry(func(options *registry.Options) {
@@ -78,7 +81,7 @@ func main() {
 	//链路追踪
 	t, io, err := common.NewTracer(MICRO_SERVICE_NAME, MICRO_JAEGER_ADDRESS)
 	if err != nil {
-		log.Fatal(err)
+		zapLogger.Fatal("NewTracer: ", err)
 	}
 	defer io.Close()
 	opentracing.SetGlobalTracer(t)
@@ -87,7 +90,7 @@ func main() {
 	mysqlInfo := common.GetMysqlFromConsul(consulConfig, "mysql")
 	db, err := gorm.Open("mysql", mysqlInfo.User+":"+mysqlInfo.Pwd+"@tcp("+mysqlInfo.Host+":"+mysqlInfo.Port+")/"+mysqlInfo.Database+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
-		log.Fatal(err)
+		zapLogger.Fatal("connect mysql: ", err)
 	}
 	defer db.Close()
 	//禁止副表 gorm默认使用复数映射，go代码的单数、复数struct形式都匹配到复数表中,开启后，将严格匹配，遵守单数形式
@@ -140,6 +143,6 @@ func main() {
 
 	// Run service
 	if err := srv.Run(); err != nil {
-		log.Fatal(err)
+		zapLogger.Fatal("Run service: ", err)
 	}
 }

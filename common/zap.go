@@ -14,9 +14,22 @@ var (
 	logger *zap.SugaredLogger
 )
 
-func init() {
-	//日志文件名称
-	fileName := "micro.log"
+type ZapLogger struct {
+	logger *zap.SugaredLogger
+}
+
+func NewZapLogger(serviceName, fileName string) *ZapLogger {
+	if len(fileName) == 0 {
+		fileName = "micro.log" //日志文件名称
+	}
+	zapLog := &ZapLogger{
+		logger: &zap.SugaredLogger{},
+	}
+	zapLog.Init(serviceName, fileName)
+	return zapLog
+}
+
+func (zaplog *ZapLogger) Init(serviceName, fileName string) {
 	// now := time.Now()
 	hook := &lumberjack.Logger{
 		Filename: fileName, //文件名称
@@ -48,64 +61,64 @@ func init() {
 		zap.AddCaller(),      //日志添加调用者信息
 		zap.AddCallerSkip(1), //设置skip，用户runtime.Caller的参数
 		// zap.AddStacktrace(zapcore.DebugLevel), //设置堆栈跟踪
-		zap.Fields(zap.String("serviceName", "ShopCart")), //设置初始化字段
+		zap.Fields(zap.String("serviceName", serviceName)), //设置初始化字段
 		// zap.Development(),//开发环境 panic开启文件及行号
 	)
-	logger = log.Sugar()
+	zaplog.logger = log.Sugar()
 }
 
-func Debug(args ...interface{}) {
-	logger.Debug(args)
+func (zaplog *ZapLogger) Debug(args ...interface{}) {
+	zaplog.logger.Debug(args)
 }
 
-func Debugf(template string, args ...interface{}) {
-	logger.Debugf(template, args...)
+func (zaplog *ZapLogger) Debugf(template string, args ...interface{}) {
+	zaplog.logger.Debugf(template, args...)
 }
 
-func Info(args ...interface{}) {
-	logger.Info(args...)
+func (zaplog *ZapLogger) Info(args ...interface{}) {
+	zaplog.logger.Info(args...)
 }
 
-func Infof(template string, args ...interface{}) {
-	logger.Infof(template, args...)
+func (zaplog *ZapLogger) Infof(template string, args ...interface{}) {
+	zaplog.logger.Infof(template, args...)
 }
 
-func Warn(args ...interface{}) {
-	logger.Warn(args...)
+func (zaplog *ZapLogger) Warn(args ...interface{}) {
+	zaplog.logger.Warn(args...)
 }
 
-func Warnf(template string, args ...interface{}) {
-	logger.Warnf(template, args...)
+func (zaplog *ZapLogger) Warnf(template string, args ...interface{}) {
+	zaplog.logger.Warnf(template, args...)
 }
 
-func Error(args ...interface{}) {
-	logger.Error(args...)
+func (zaplog *ZapLogger) Error(args ...interface{}) {
+	zaplog.logger.Error(args...)
 }
 
-func Errorf(template string, args ...interface{}) {
-	logger.Errorf(template, args...)
+func (zaplog *ZapLogger) Errorf(template string, args ...interface{}) {
+	zaplog.logger.Errorf(template, args...)
 }
 
-func DPanic(args ...interface{}) {
-	logger.DPanic(args...)
+func (zaplog *ZapLogger) DPanic(args ...interface{}) {
+	zaplog.logger.DPanic(args...)
 }
 
-func DPanicf(template string, args ...interface{}) {
-	logger.DPanicf(template, args...)
+func (zaplog *ZapLogger) DPanicf(template string, args ...interface{}) {
+	zaplog.logger.DPanicf(template, args...)
 }
 
-func Panic(args ...interface{}) {
-	logger.Panic(args...)
+func (zaplog *ZapLogger) Panic(args ...interface{}) {
+	zaplog.logger.Panic(args...)
 }
 
-func Panicf(template string, args ...interface{}) {
-	logger.Panicf(template, args...)
+func (zaplog *ZapLogger) Panicf(template string, args ...interface{}) {
+	zaplog.logger.Panicf(template, args...)
 }
 
-func Fatal(args ...interface{}) {
-	logger.Fatal(args...)
+func (zaplog *ZapLogger) Fatal(args ...interface{}) {
+	zaplog.logger.Fatal(args...)
 }
 
-func Fatalf(template string, args ...interface{}) {
-	logger.Fatalf(template, args...)
+func (zaplog *ZapLogger) Fatalf(template string, args ...interface{}) {
+	zaplog.logger.Fatalf(template, args...)
 }
